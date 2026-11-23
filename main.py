@@ -1,18 +1,14 @@
-"""A CrewAI crew behind FastAPI - the uagents8 "CrewAI" template (#1882 Phase 2).
+"""A CrewAI crew behind FastAPI - the uAgents8 "CrewAI" template.
 
-Forked from docs/marketing/framework-samples/crewai (verified green,
-docs/marketing/framework-e2e.md row 5, 2026-11-01) and extended for the templates catalog with a
-provider choice and a friendlier "no key" answer - the same treatment template-langgraph already
-got in Phase 1. Kept deliberately close to that proven sample - same two-agent crew, same /ask
-endpoint - so nothing about the measured footprint changes: no extra provider package is
-installed by default (see requirements.txt); the Anthropic path is only probed for at runtime,
-the same way the original sample's own OPENAI_API_KEY branch already worked.
+Kept deliberately close to a small, proven two-agent crew shape - so nothing about the measured
+footprint changes: no extra provider package is installed by default (see requirements.txt); the
+Anthropic path is only probed for at runtime, the same way the OpenAI path already works.
 
   GET  /      health - the platform only checks that the port accepts connections
   POST /ask   {"question": "..."} -> {"question", "answer", "mode"}
 
-Provider (owner decision 2026-11-21): set LLM_PROVIDER to "openai" (default) or "anthropic", and
-the matching OPENAI_API_KEY / ANTHROPIC_API_KEY under Environment Variables with Sensitive on.
+Provider: set LLM_PROVIDER to "openai" (default) or "anthropic", and the matching
+OPENAI_API_KEY / ANTHROPIC_API_KEY under Environment Variables with Sensitive on.
 With no key set the template still starts and answers - see NO_KEY_MESSAGE below, a deliberately
 better first impression than refusing to boot.
 
