@@ -1,25 +1,19 @@
 #!/usr/bin/env python3
-"""Weekly deploy check (#1882 Phase 2): deploys THIS repository to the uagents8 platform's own
-e2e sandbox from a Code Archive, calls POST /ask, then deletes the agent - run by
+"""Weekly deploy check: deploys THIS repository to the uAgents8 platform's own e2e sandbox
+from a Code Archive, calls POST /ask, then deletes the agent - run by
 `.github/workflows/deploy-check.yml` every Monday and on demand (`workflow_dispatch`).
 
-Catches a framework release or a dependency drift before a customer meets it, the same
-"quality gate" docs/marketing/framework-e2e.md already runs by hand for the framework sample
-pages - this script automates the equivalent check for the published template repository.
-Mirrors template-langgraph's own deploy_check.py almost exactly; the one real difference is the
-answer check below - CrewAI has no computation-only path the way LangGraph's "calculate" node
-does, so there is no single deterministic string to assert on regardless of whether a key is set
-(unlike langgraph's "2+3*4 = 14"). The e2e sandbox account has no provider key, so this only
-checks that /ask actually answers (non-empty, mode is "stub" or "model") - the point of this gate
-is catching a broken build/deploy/health check, not grading conversational quality.
+Catches a framework release or a dependency drift before a customer meets it. CrewAI has no
+computation-only path the way a fixed arithmetic question would, so there is no single
+deterministic answer to assert on regardless of whether a key is set - this only checks that
+/ask actually answers (non-empty, mode is "stub" or "model"); the point of this gate is catching
+a broken build/deploy/health check, not grading conversational quality.
 
-STATUS (as prepared, not yet dry-run against the real API - see this template's own
-OWNER-PUBLISH-TEMPLATE.md section 5): the request/response shapes below are read from the
-uagents8 monorepo's backend/app/schemas.py (AppCreate's `source_type="archive"` +
-`source_archive_key`, app_type, resource_size, environment; AppResponse's `id`/`status`/`url`)
-and from POST /v1/apps/upload's own multipart contract (backend/app/api/v1/endpoints/apps/
-crud.py). Dry-run once by hand (`workflow_dispatch`) and read the log before trusting the
-weekly schedule; adjust this script if the real API disagrees with any assumption below.
+STATUS: prepared, not yet dry-run against the real API. The request/response shapes below
+follow the platform's public API (app creation from a Code Archive, polling for the Running
+status, deleting the app when done). Dry-run once by hand (`workflow_dispatch`) and read the
+log before trusting the weekly schedule; adjust this script if the real API disagrees with any
+assumption below.
 
 Environment:
   UAGENTS8_E2E_API_TOKEN   required - Bearer token (Cabinet API Key or PAT) for the e2e sandbox account.
@@ -127,7 +121,7 @@ def _call_ask(agent_url: str) -> None:
 
 def main() -> int:
     if not TOKEN:
-        print("UAGENTS8_E2E_API_TOKEN is not set - see this template's OWNER-PUBLISH-TEMPLATE.md section 5.",
+        print("UAGENTS8_E2E_API_TOKEN is not set - set it as a repository secret before this workflow can run.",
               file=sys.stderr)
         return 2
 

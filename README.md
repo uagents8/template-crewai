@@ -4,7 +4,7 @@
 
 A small [CrewAI](https://www.crewai.com) crew behind [FastAPI](https://fastapi.tiangolo.com), ready to deploy on
 [uAgents8](https://uagents8.com) and to replace with your own crew. One of three
-one-click framework templates (issue #1882): LangGraph, this one, and the OpenAI Agents SDK.
+one-click framework templates: LangGraph, this one, and the OpenAI Agents SDK.
 
 > **Today, the badge opens the dashboard**, where **+ Deploy Agent -> Source -> Templates ->
 > CrewAI starter** deploys it in the steps below. **Use this as a GitHub template.**
