@@ -25,4 +25,9 @@ jobs:
         env:
           UAGENTS8_E2E_API_TOKEN: ${{ secrets.UAGENTS8_E2E_API_TOKEN }}
           UAGENTS8_API_URL: ${{ secrets.UAGENTS8_API_URL }}
+          # CrewAI's dependency tree (chromadb, onnxruntime, numpy, ...) makes for a slow
+          # build; a real timed run (2026-11-24) reached live at 253s, right up against the
+          # script's 300s default - raised with headroom so a slightly slower build doesn't
+          # produce a false timeout failure.
+          DEPLOY_CHECK_TIMEOUT_S: "600"
         run: python scripts/deploy_check.py
