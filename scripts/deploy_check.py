@@ -119,7 +119,10 @@ def _wait_for_running(app_id: str) -> dict:
 def _call_ask(agent_url: str) -> None:
     payload = json.dumps({"question": "Why use a crew?"}).encode("utf-8")
     req = urllib.request.Request(
-        f"{agent_url.rstrip('/')}/ask", data=payload, headers={"Content-Type": "application/json", "User-Agent": "uagents8-template-deploy-check/1.0"}, method="POST",
+        f"{agent_url.rstrip('/')}/ask", data=payload, headers={
+            "Content-Type": "application/json",
+            "User-Agent": "uagents8-template-deploy-check/1.0",
+        }, method="POST",
     )
     with urllib.request.urlopen(req, timeout=30) as resp:
         body = json.loads(resp.read())
